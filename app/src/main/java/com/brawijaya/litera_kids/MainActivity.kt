@@ -5,43 +5,35 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.brawijaya.litera_kids.ui.theme.Litera_kidsTheme
+import com.brawijaya.litera_kids.data.repository.LeaderboardRepositoryImpl
+import com.brawijaya.litera_kids.domain.usecase.GetLeaderboardUseCase
+import com.brawijaya.litera_kids.ui.leaderboard.LeaderboardScreen
+import com.brawijaya.litera_kids.ui.leaderboard.LeaderboardViewModel
+import com.brawijaya.litera_kids.ui.theme.LiterakidsTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val leaderboardRepository = LeaderboardRepositoryImpl()
+        val getLeaderboardUseCase = GetLeaderboardUseCase(leaderboardRepository)
+
         setContent {
-            Litera_kidsTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+            LiterakidsTheme {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    LeaderboardScreen(
+                        viewModel = LeaderboardViewModel(getLeaderboardUseCase),
+                        onBackClick = { finish() }
                     )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Litera_kidsTheme {
-        Greeting("Android")
     }
 }
