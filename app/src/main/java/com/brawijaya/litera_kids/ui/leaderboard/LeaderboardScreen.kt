@@ -30,14 +30,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.brawijaya.litera_kids.data.model.LeaderboardUser
 import com.brawijaya.litera_kids.data.repository.LeaderboardRepositoryImpl
 import com.brawijaya.litera_kids.domain.usecase.GetLeaderboardUseCase
 import com.brawijaya.litera_kids.ui.leaderboard.components.LeaderboardItem
-import com.brawijaya.litera_kids.ui.theme.LiterakidsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -122,53 +120,65 @@ fun LeaderboardContent(
     users: List<LeaderboardUser>,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = "Top 10",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        )
-        Text(
-            text = "Yuk, Asah Terus Minat Bacamu Dan Jadi Yang Terbaik!",
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.Gray,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        )
-
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            contentPadding = PaddingValues(
-                top = 0.dp,
-                bottom = 16.dp,
-                start = 16.dp,
-                end = 16.dp
+    Box(
+        modifier = modifier.background(
+            Brush.verticalGradient(
+                colors = listOf(
+                    Color(0xFFF8F8F8),
+                    Color.White
+                )
             )
+        )
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
         ) {
-            itemsIndexed(users) { index, user ->
-                LeaderboardItem(
-                    user = user,
-                    position = index + 1,
-                    modifier = Modifier.fillMaxWidth()
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFFA892F3).copy(alpha = 0.3f),
+                                Color(0xFFF8F8F8)
+                            )
+                        )
+                    )
+                    .padding(vertical = 16.dp)
+            ) {
+                Text(
+                    text = "Top 10",
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    color = Color(0xFF006699)
+                )
+                Text(
+                    text = "Yuk, Asah Terus Minat Bacamu Dan Jadi Yang Terbaik!",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Gray,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                contentPadding = PaddingValues(
+                    top = 16.dp,
+                    bottom = 16.dp,
+                    start = 16.dp,
+                    end = 16.dp
+                )
+            ) {
+                itemsIndexed(users) { index, user ->
+                    LeaderboardItem(
+                        user = user,
+                        position = index + 1,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LeaderboardScreenPreview() {
-    LiterakidsTheme {
-        LeaderboardScreen()
     }
 }
