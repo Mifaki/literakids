@@ -125,7 +125,7 @@ fun LeaderboardItem(
                         .data(user.avatarUrl)
                         .crossfade(true)
                         .build(),
-                    contentDescription = "Avatar for ${user.name}",
+                    contentDescription = "Avatar for ${user.fullName}",
                     contentScale = ContentScale.Crop,
                     error = painterResource(id = R.drawable.user_placeholder),
                     placeholder = painterResource(id = R.drawable.user_placeholder),
@@ -169,7 +169,7 @@ fun LeaderboardItem(
                     .padding(horizontal = 8.dp)
             ) {
                 Text(
-                    text = user.name,
+                    text = user.fullName,
                     fontWeight = FontWeight.Bold,
                     color = if (position <= 3) Color(0xFF006699) else Color(0xFF006699),
                     fontSize = 16.sp

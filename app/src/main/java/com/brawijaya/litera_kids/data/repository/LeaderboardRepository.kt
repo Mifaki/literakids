@@ -28,7 +28,7 @@ class LeaderboardRepositoryImpl : LeaderboardRepository {
 
                     for (childSnapshot in snapshot.children) {
                         val userId = childSnapshot.key ?: continue
-                        val name = childSnapshot.child("name").getValue(String::class.java) ?: ""
+                        val fullName = childSnapshot.child("fullName").getValue(String::class.java) ?: ""
                         val username = childSnapshot.child("username").getValue(String::class.java) ?: ""
                         val level = childSnapshot.child("level").getValue(Long::class.java)?.toInt() ?: 0
                         val avatarUrl = childSnapshot.child("avatarUrl").getValue(String::class.java) ?: ""
@@ -38,7 +38,7 @@ class LeaderboardRepositoryImpl : LeaderboardRepository {
                         users.add(
                             LeaderboardUser(
                                 id = userId,
-                                name = name,
+                                fullName = fullName,
                                 username = username,
                                 level = level,
                                 avatarUrl = avatarUrl,
