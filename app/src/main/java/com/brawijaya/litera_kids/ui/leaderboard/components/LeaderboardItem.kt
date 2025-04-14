@@ -62,9 +62,18 @@ fun LeaderboardItem(
             )
         )
         else -> null
+    } ?: if (user.isCurrentUser) {
+        Brush.horizontalGradient(
+            colors = listOf(
+                Color(0xFF5AD8FF),
+                Color(0xFFDE99FF)
+            )
+        )
+    } else {
+        null
     }
 
-    val backgroundColor = if (user.isCurrentUser) Color(0xFF78CCFF) else Color.White
+    val backgroundColor = Color.White
 
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -126,13 +135,14 @@ fun LeaderboardItem(
                         .crossfade(true)
                         .build(),
                     contentDescription = "Avatar for ${user.fullName}",
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.Fit,
                     error = painterResource(id = R.drawable.user_placeholder),
                     placeholder = painterResource(id = R.drawable.user_placeholder),
                     modifier = Modifier
                         .size(54.dp)
                         .clip(CircleShape)
                         .zIndex(1f)
+                        .background(Color.White)
                 )
                 Surface(
                     shape = CircleShape,
@@ -140,7 +150,7 @@ fun LeaderboardItem(
                         1 -> Color(0xFFFFCF25)
                         2 -> Color(0xFFB0B0B0)
                         3 -> Color(0xFFD57D3D)
-                        else -> Color(0xFF78D9FF)
+                        else -> if (user.isCurrentUser) Color(0xFFB173FF) else Color(0xFF78D9FF)
                     },
                     modifier = Modifier
                         .size(22.dp).then(
@@ -171,12 +181,12 @@ fun LeaderboardItem(
                 Text(
                     text = user.fullName,
                     fontWeight = FontWeight.Bold,
-                    color = if (position <= 3) Color(0xFF006699) else Color(0xFF006699),
+                    color = if (user.isCurrentUser) Color.White else Color(0xFF0A5470),
                     fontSize = 16.sp
                 )
                 Text(
                     text = "@${user.username}",
-                    color = if (position <= 3) Color.DarkGray else Color.Gray,
+                    color = if (user.isCurrentUser) Color.White else Color(0xFF0A5470),
                     fontSize = 12.sp
                 )
             }
@@ -185,7 +195,7 @@ fun LeaderboardItem(
             ) {
                 Image(
                     painter = painterResource(
-                        id = if (position <= 3) R.drawable.crown_white else R.drawable.crown_blue
+                        id = if (position <= 3 || user.isCurrentUser) R.drawable.crown_white else R.drawable.crown_blue
                     ),
                     contentDescription = "Level icon",
                     modifier = Modifier.size(24.dp)
@@ -194,7 +204,7 @@ fun LeaderboardItem(
                     text = "Level ${user.level}",
                     fontWeight = FontWeight.Medium,
                     fontSize = 10.sp,
-                    color = Color.DarkGray,
+                    color = if (user.isCurrentUser) Color.White else Color(0xFF0A5470),
                     modifier = Modifier.padding(start = 4.dp)
                 )
             }

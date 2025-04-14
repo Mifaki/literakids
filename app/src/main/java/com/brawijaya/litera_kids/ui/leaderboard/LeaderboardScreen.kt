@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -109,8 +111,10 @@ fun LeaderboardScreen(
                     val currentUser = allUsers.find { it.isCurrentUser }
                     val currentUserPosition = allUsers.indexOfFirst { it.isCurrentUser } + 1
 
+                    val topUsers = allUsers.take(10)
+
                     LeaderboardContentWithStickyUser(
-                        allUsers = allUsers,
+                        allUsers = topUsers,
                         currentUser = currentUser,
                         currentUserPosition = currentUserPosition,
                         modifier = Modifier.fillMaxSize()
@@ -191,6 +195,9 @@ fun LeaderboardContentWithStickyUser(
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
             }
