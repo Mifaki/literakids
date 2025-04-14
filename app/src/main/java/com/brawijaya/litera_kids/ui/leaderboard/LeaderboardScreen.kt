@@ -104,9 +104,15 @@ fun LeaderboardScreen(
                     )
                 }
                 is LeaderboardState.Success -> {
-                    val users = (leaderboardState as LeaderboardState.Success).users
-                    LeaderboardContent(
-                        users = users,
+                    val allUsers = (leaderboardState as LeaderboardState.Success).users
+
+                    val currentUser = allUsers.find { it.isCurrentUser }
+                    val currentUserPosition = allUsers.indexOfFirst { it.isCurrentUser } + 1
+
+                    LeaderboardContentWithStickyUser(
+                        allUsers = allUsers,
+                        currentUser = currentUser,
+                        currentUserPosition = currentUserPosition,
                         modifier = Modifier.fillMaxSize()
                     )
                 }
@@ -116,8 +122,10 @@ fun LeaderboardScreen(
 }
 
 @Composable
-fun LeaderboardContent(
-    users: List<LeaderboardUser>,
+fun LeaderboardContentWithStickyUser(
+    allUsers: List<LeaderboardUser>,
+    currentUser: LeaderboardUser?,
+    currentUserPosition: Int,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -162,22 +170,44 @@ fun LeaderboardContent(
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                contentPadding = PaddingValues(
-                    top = 16.dp,
-                    bottom = 16.dp,
-                    start = 16.dp,
-                    end = 16.dp
-                )
+
+            Box(
+                modifier = Modifier.weight(1f)
             ) {
-                itemsIndexed(users) { index, user ->
-                    LeaderboardItem(
-                        user = user,
-                        position = index + 1,
-                        modifier = Modifier.fillMaxWidth()
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    contentPadding = PaddingValues(
+                        top = 16.dp,
+                        bottom = 80.dp,
+                        start = 16.dp,
+                        end = 16.dp
                     )
+                ) {
+                    itemsIndexed(allUsers) { index, user ->
+                        if (!user.isCurrentUser) {
+                            LeaderboardItem(
+                                user = user,
+                                position = index + 1,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
                 }
+            }
+        }
+
+        currentUser?.let { user ->
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                LeaderboardItem(
+                    user = user,
+                    position = currentUserPosition,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
